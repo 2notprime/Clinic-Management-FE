@@ -42,7 +42,7 @@ let MyProfile = () => {
                             email: user.email,
                             phone: user.phonenumber || "",
                             address: user.address,
-                            gender: user.gender === 0 ? "Male" : "Female",
+                            gender: user.gender === 1 ? "Male" : "Female",
                             dob: user.dob || "",
                         });
                     }

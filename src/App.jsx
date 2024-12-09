@@ -12,13 +12,15 @@ import MyAppointments from './pages/MyAppointments';
 import Footer from "./components/Footer";
 import { UserProvider, useUser } from './context/UserContext';
 
+// Nhập khẩu ứng dụng Admin
+import AdminApp from './admin/src/App.jsx'; // Đảm bảo đường dẫn chính xác tới App.jsx của admin
+
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userId, setUserId } = useUser(); 
 
   useEffect(() => {
-
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
     if (id && !userId) {
@@ -27,7 +29,6 @@ const App = () => {
   }, [location, userId, setUserId]);
 
   useEffect(() => {
-
     if (userId) {
       const currentPath = location.pathname;
       if (!location.search.includes('id=')) {
@@ -36,10 +37,15 @@ const App = () => {
     }
   }, [userId, location, navigate]);
 
+  // Kiểm tra xem hiện tại có phải đang ở trong admin không
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
     <div className="mx-4 sm:mx-[10%]">
-      <NavBar />
+      {/* Render NavBar và Footer chỉ khi không phải là trang admin */}
+      {!isAdminRoute && <NavBar />}
       <Routes>
+        {/* Routes cho ứng dụng chính */}
         <Route path="/" element={<Home />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:speciality" element={<Doctors />} />
@@ -49,12 +55,15 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/my-appointments" element={<MyAppointments />} />
+
+        {/* Routes cho ứng dụng admin */}
+        <Route path="/admin/*" element={<AdminApp />} /> {/* Đảm bảo AdminApp sẽ được render khi truy cập /admin */}
       </Routes>
-      <Footer />
+      {/* Render Footer chỉ khi không phải là trang admin */}
+      {!isAdminRoute && <Footer />}
     </div>
   );
 };
-
 
 const AppWithUserContext = () => (
   <UserProvider>
