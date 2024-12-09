@@ -3,7 +3,6 @@ import axios from "axios";
 import { assets } from "../assets/assets";
 import { useSearchParams } from 'react-router-dom';
 
-
 let MyProfile = () => {
     let [userData, setUserData] = useState({
         name: "",
@@ -29,9 +28,9 @@ let MyProfile = () => {
         if (id) {
             let fetchUserData = async () => {
                 try {
-                    let response = await axios.get("http://localhost:5000/api/get-my-profile",
-                        { params: { id: id } }
-                    );
+                    let response = await axios.get("http://localhost:5000/api/get-my-profile", {
+                        params: { id: id }
+                    });
                     let result = response.data;
 
                     if (result.errCode === 0) {
@@ -61,29 +60,40 @@ let MyProfile = () => {
         if (file) {
             let reader = new FileReader();
             reader.onloadend = () => {
+                // Lấy chuỗi base64 và xóa tiền tố "data:image/*;base64,"
+                let base64Image = reader.result.replace(/^data:image\/[a-zA-Z]+;base64,/, '');
                 setUserData((prev) => ({
                     ...prev,
-                    image: reader.result, // Set the uploaded image as the new profile picture
+                    image: base64Image, // Set the uploaded image (without prefix) as the new profile picture
                 }));
             };
             reader.readAsDataURL(file); // Convert the uploaded file to a data URL
         }
     };
+    
 
+    // Function to handle Save
     let handleSave = async () => {
+        // Kiểm tra giá trị của userData trước khi gửi
+        console.log("Before saving, userData:", userData);
+
+        // Nếu dữ liệu thiếu tên hoặc email thì không cho phép lưu
+        if (!userData.name || !userData.email) {
+            alert("Name and email are required!");
+            return;
+        }
+
         try {
-            // Gửi dữ liệu qua API
             let response = await axios.put("http://localhost:5000/api/update-my-profile", {
                 id,
                 userData,
             });
 
+            console.log("Response from API:", response.data);
             if (response.data.errCode === 0) {
-                // Nếu cập nhật thành công, thoát chế độ chỉnh sửa
                 setIsEdit(false);
                 alert("Profile updated successfully!");
             } else {
-                // Hiển thị thông báo lỗi nếu có vấn đề
                 alert(`Error: ${response.data.message}`);
             }
         } catch (error) {
@@ -92,10 +102,12 @@ let MyProfile = () => {
         }
     };
 
-
     return (
         <div className="max-w-lg flex flex-col gap-2 text-sm">
-            <img className="w-36 rounded" src={userData.image} alt="Profile" />
+            <img className="w-36 rounded" 
+                src={userData.image ? (userData.image.includes(`data:image`) ? userData.image : `data:image/png;base64,${userData.image}`) : assets.profile_pic} 
+                alt="Profile" 
+            />
 
             {isEdit && (
                 <div className="mt-4">
@@ -202,7 +214,6 @@ let MyProfile = () => {
                     <button
                         className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all"
                         onClick={handleSave}
-
                     >
                         Save Information
                     </button>

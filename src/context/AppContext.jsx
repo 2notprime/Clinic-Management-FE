@@ -32,7 +32,7 @@ const AppContextProvider = (props) => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([fetchDoctors(), fetchSpecialties()]);
+            await Promise.all([fetchDoctors()]);
             setLoading(false);
         };
         fetchData();
