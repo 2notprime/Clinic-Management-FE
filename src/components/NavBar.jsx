@@ -6,12 +6,13 @@ import { useUser } from '../context/UserContext';
 const NavBar = () => {
     const navigate = useNavigate();
     const [showMenu, setshowMenu] = useState(false);
-    const { userId, setUserId, user } = useUser();
+    const { userId, setUserId, user, roleId } = useUser();
+
 
     const handleLogout = () => {
         // Clear user context
         setUserId(null);
-        
+
         // Remove token (if stored in localStorage or sessionStorage)
         localStorage.removeItem('authToken');
         sessionStorage.removeItem('authToken');
@@ -19,7 +20,7 @@ const NavBar = () => {
         // Redirect to login page
         navigate('/login');
     };
-
+    const toPath = roleId === 'R2' ? '/doctors' : '/patients';
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
             <img onClick={() => navigate('/')} className='w-56 cursor-pointer' src={assets.logoreal} alt='' />
@@ -28,7 +29,7 @@ const NavBar = () => {
                     <li className='py-1'>HOME</li>
                     <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
                 </NavLink>
-                <NavLink to='/doctors'>
+                <NavLink to={toPath}>
                     <li className='py-1'>BOOKING</li>
                     <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
                 </NavLink>
