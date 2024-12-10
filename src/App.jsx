@@ -11,6 +11,8 @@ import MyProfile from './pages/MyProfile';
 import MyAppointments from './pages/MyAppointments';
 import Footer from "./components/Footer";
 import { UserProvider, useUser } from './context/UserContext';
+import ChangePassword from "./pages/ChangePassword.jsx";
+
 
 // Nhập khẩu ứng dụng Admin
 import AdminApp from './admin/src/App.jsx'; // Đảm bảo đường dẫn chính xác tới App.jsx của admin
@@ -55,7 +57,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/my-appointments" element={<MyAppointments />} />
-
+        <Route path='/change-password' element={<ChangePassword />} />
         {/* Routes cho ứng dụng admin */}
         <Route path="/admin/*" element={<AdminApp />} /> {/* Đảm bảo AdminApp sẽ được render khi truy cập /admin */}
       </Routes>
