@@ -27,22 +27,27 @@ const Login = () => {
                     password,
                 });
                 console.log('Sign Up Success:', response);
+
+                alert('Create success');
+                navigate('/');
             } else {
                 response = await axiosClient.post('/login', {
                     email,
                     password,
                 });
                 console.log('Login Success:', response);
+                if (response?.user) {
+                    const userId = response.user.id;
+                    console.log("User ID:", userId);
+                    setUserId(userId);  // Cập nhật userId vào context
+                    navigate('/');  // Điều hướng về trang chủ
+                } else {
+                    console.error("User data not found.");
+                }
             }
-
-            if (response?.user) {
-                const userId = response.user.id;
-                console.log("User ID:", userId);
-                setUserId(userId);  // Cập nhật userId vào context
-                navigate('/');  // Điều hướng về trang chủ
-            } else {
-                console.error("User data not found.");
-            }
+            
+            
+            
         } catch (error) {
             console.error('Error:', error);
             if(error.response.data.errCode===1){
@@ -55,6 +60,9 @@ const Login = () => {
             }
 
         }
+
+
+
     };
 
     return (
