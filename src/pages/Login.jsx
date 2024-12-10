@@ -9,8 +9,8 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const navigate = useNavigate();  
-    const { setUserId } = useUser(); 
+    const navigate = useNavigate();
+    const { setUserId } = useUser();
 
     let check = 0;
 
@@ -27,29 +27,33 @@ const Login = () => {
                     password,
                 });
                 console.log('Sign Up Success:', response);
+                alert("create successfully!")
+                navigate("/")
             } else {
                 response = await axiosClient.post('/login', {
                     email,
                     password,
                 });
-                console.log('Login Success:', response);
+
+                if (response?.user) {
+                    const userId = response.user.id;
+                    console.log("User ID:", userId);
+                    setUserId(userId);  // Cập nhật userId vào context
+                    navigate('/');  // Điều hướng về trang chủ
+                    console.log('Login Success:', response);
+                } else {
+                    console.error("User data not found.");
+                }
             }
 
-            if (response?.user) {
-                const userId = response.user.id;
-                console.log("User ID:", userId);
-                setUserId(userId);  // Cập nhật userId vào context
-                navigate('/');  // Điều hướng về trang chủ
-            } else {
-                console.error("User data not found.");
-            }
+
         } catch (error) {
             console.error('Error:', error);
-            if(error.response.data.errCode===1){
-                alert("Thiếu mẹ email hoặc pass") 
+            if (error.response.data.errCode === 1) {
+                alert("Thiếu mẹ email hoặc pass")
                 check = 1;
             }
-            else if(error.response.data.errCode===2 || error.response.data.errCode===3 || error.response.data.errCode===4)    {
+            else if (error.response.data.errCode === 2 || error.response.data.errCode === 3 || error.response.data.errCode === 4) {
                 alert("Sai email / pass")
                 check = 2;
             }
@@ -96,7 +100,7 @@ const Login = () => {
                         placeholder="Enter your password"
                     />
                 </div>
-                {check===1?<p>Thiếu mẹ email hoặc pass</p>:check===2?<p>"Sai email / pass"</p>:<p></p>}
+                {check === 1 ? <p>Thiếu mẹ email hoặc pass</p> : check === 2 ? <p>"Sai email / pass"</p> : <p></p>}
                 <button className='bg-primary text-white w-full py-2 rounded-md text-base'>
                     {state === 'Sign Up' ? "Create Account" : "Login"}
                 </button>

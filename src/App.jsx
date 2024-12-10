@@ -12,6 +12,7 @@ import MyAppointments from './pages/MyAppointments';
 import Footer from "./components/Footer";
 import { UserProvider, useUser } from './context/UserContext';
 import ChangePassword from "./pages/ChangePassword.jsx";
+import Patients from "./pages/Patients.jsx";
 
 
 // Nhập khẩu ứng dụng Admin
@@ -20,13 +21,13 @@ import AdminApp from './admin/src/App.jsx'; // Đảm bảo đường dẫn chí
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId, setUserId } = useUser(); 
+  const { userId, setUserId } = useUser();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
     if (id && !userId) {
-      setUserId(id); 
+      setUserId(id);
     }
   }, [location, userId, setUserId]);
 
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/my-appointments" element={<MyAppointments />} />
         <Route path='/change-password' element={<ChangePassword />} />
+        <Route path='/patients' element={<Patients />} />
         {/* Routes cho ứng dụng admin */}
         <Route path="/admin/*" element={<AdminApp />} /> {/* Đảm bảo AdminApp sẽ được render khi truy cập /admin */}
       </Routes>
