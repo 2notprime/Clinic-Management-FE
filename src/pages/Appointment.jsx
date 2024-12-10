@@ -290,7 +290,7 @@ const Appointment = () => {
       alert("Your appointment has been booked!");
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert("Failed to book appointment. Please try again.");
+      alert("You have an other appointment at the same time");
     }
   };
 
