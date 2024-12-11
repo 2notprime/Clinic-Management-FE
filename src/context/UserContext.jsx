@@ -52,7 +52,7 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await axiosClient.get(`/get-my-previous-patient/${id}`);
       setPreviosPatients(response.data); // Lưu thông tin bệnh nhân vào state
-      console.log('Previos Patients fetched:', response.data);
+      
     } catch (error) {
       console.error('Error fetching previos patients:', error);
       setPreviosPatients([]); // Đặt mảng bệnh nhân r��ng nếu có l��i
