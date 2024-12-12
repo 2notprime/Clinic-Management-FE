@@ -7,6 +7,7 @@ import { useUser } from "../context/UserContext";
 import RelatedDoctors from "../components/RelatedDoctors";
 
 const Appointment = () => {
+ 
   const { docId } = useParams();
   const { doctors } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];

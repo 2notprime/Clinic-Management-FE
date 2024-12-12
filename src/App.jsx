@@ -14,7 +14,6 @@ import { UserProvider, useUser } from './context/UserContext';
 import ChangePassword from "./pages/ChangePassword.jsx";
 import Patients from "./pages/Patients.jsx";
 
-
 // Nhập khẩu ứng dụng Admin
 import AdminApp from './admin/src/App.jsx'; // Đảm bảo đường dẫn chính xác tới App.jsx của admin
 
@@ -22,7 +21,9 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userId, setUserId } = useUser();
-
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  
+  if(!isAdminRoute){
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
@@ -40,8 +41,10 @@ const App = () => {
     }
   }, [userId, location, navigate]);
 
+}
+
   // Kiểm tra xem hiện tại có phải đang ở trong admin không
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  
 
   return (
     <div className="mx-4 sm:mx-[10%]">
@@ -60,6 +63,7 @@ const App = () => {
         <Route path="/my-appointments" element={<MyAppointments />} />
         <Route path='/change-password' element={<ChangePassword />} />
         <Route path='/patients' element={<Patients />} />
+        
         {/* Routes cho ứng dụng admin */}
         <Route path="/admin/*" element={<AdminApp />} /> {/* Đảm bảo AdminApp sẽ được render khi truy cập /admin */}
       </Routes>
