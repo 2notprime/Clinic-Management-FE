@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import MyProfile from "./pages/MyProfile";
 import ChangePassword from "./components/ChangePassword";
 import { UserProvider, useUser } from './context/UserContext';
+import EditDoctor from './pages/EditDoctor'
+import Edit from './pages/Edit'
 
 const App = () => {
   const navigate = useNavigate();
@@ -47,6 +49,8 @@ const App = () => {
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/add-doctor" element={<AddDoctor />} />
           <Route path="/doctors-list" element={<DoctorsList />} />
+          <Route path="/edit/:docId" element={<Edit/>} />
+          <Route path="/editdoctor/:docId" element={<EditDoctor/>} />
           <Route path="/my-appointments" element={<MyAppointments />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path='/change-password' element={<ChangePassword />} />

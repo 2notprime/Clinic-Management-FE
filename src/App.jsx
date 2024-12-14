@@ -17,6 +17,9 @@ import Patients from "./pages/Patients.jsx";
 // Nhập khẩu ứng dụng Admin
 import AdminApp from './admin/src/App.jsx'; // Đảm bảo đường dẫn chính xác tới App.jsx của admin
 
+// Nhập khẩu ChatBox
+import ChatBox from './components/ChatBox'; // Đảm bảo đường dẫn chính xác tới component ChatBox
+
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,6 +72,8 @@ const App = () => {
       </Routes>
       {/* Render Footer chỉ khi không phải là trang admin */}
       {!isAdminRoute && <Footer />}
+      {/* Render ChatBox cho ứng dụng chính */}
+      {!isAdminRoute && <ChatBox />}
     </div>
   );
 };

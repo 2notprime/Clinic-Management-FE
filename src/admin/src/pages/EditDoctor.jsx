@@ -1,22 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
-import axiosClient from "../axiosClient";
+import axiosClient from "../../../axiosClient";
 import { useUser } from "../context/UserContext";
 import RelatedDoctors from "../components/RelatedDoctors";
+import { Navigate } from "react-router-dom";
 
 const Appointment = () => {
- 
   const { docId } = useParams();
   const { doctors } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
   const { userId } = useUser(); // Lấy userId từ context
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
+
+  const navigate = useNavigate();
 
   const timeSlotMapping = {
     T1: "07:00 AM - 08:00 AM",
@@ -29,7 +30,6 @@ const Appointment = () => {
     T8: "04:00 PM - 05:00 PM",
   };
 
-  // Lấy thông tin bác sĩ
   const fetchDocInfo = async () => {
     const doctor = doctors.find((doc) => doc._id === docId);
     if (doctor) {
@@ -39,19 +39,17 @@ const Appointment = () => {
     }
   };
 
-  // Lấy lịch hẹn từ API
   const fetchAvailableSlots = async () => {
     try {
       const response = await axiosClient.get(
         `http://localhost:5000/api/doctor-calendar-free?doctorId=${docId}`
       );
-      const data = response.data; // Assuming the response data is structured like the example you provided
-      console.log(data)
+      const data = response.data;
       const slots = Object.keys(data).map((dateString) => {
         const daySlots = data[dateString].map((slotKey) => {
           return {
-            time: timeSlotMapping[slotKey], // Map slot to time range
-            dateTime: new Date(dateString), // Convert date string to Date object
+            time: timeSlotMapping[slotKey],
+            dateTime: new Date(dateString),
           };
         });
         return daySlots;
@@ -63,35 +61,26 @@ const Appointment = () => {
     }
   };
 
-  // Đặt lịch hẹn
-  const bookAppointment = async () => {
-    if (selectedSlotIndex === null) {
-      alert("Please select a time slot.");
-      return;
-    }
-    if(!userId){
-      alert("Đã đăng nhập đéo đâu");
-      return
-    }
-
-    const selectedSlot = docSlots[slotIndex][selectedSlotIndex];
-    const appointmentData = {
-      doctorId: docInfo._id,
-      doctorName: docInfo.name,
-      date: selectedSlot.dateTime.toISOString(),
-      time: selectedSlot.time,
-      patientId: userId,
-    };
-
+  const handleDelete = async () => {
+  const isConfirmed = window.confirm("Are you sure you want to delete this doctor?");
+  if (isConfirmed) {
     try {
-      const response = await axiosClient.post("/appointments", appointmentData);
-      console.log("Appointment booked successfully:", response);
-      alert("Your appointment has been booked!");
+      // Gọi API để xóa bác sĩ
+      console.log("Deleting doctor information...");
+      await axiosClient.delete(`/delete-doctor/${docId}`);
+      
+      // Chuyển hướng về trang admin sau khi xóa thành công
+      navigate("/admin/");
     } catch (error) {
-      console.error("Error booking appointment:", error);
-      alert("You have an other appointment at the same time");
+      // Xử lý lỗi nếu có
+      console.error("Error deleting doctor:", error);
+      alert("There was an error deleting the doctor. Please try again.");
     }
-  };
+  } else {
+    console.log("Delete action canceled.");
+  }
+};
+
 
   useEffect(() => {
     if (doctors.length > 0) {
@@ -145,48 +134,23 @@ const Appointment = () => {
             Appointment fee:{" "}
             <span className="text-gray-600">${docInfo.fees}</span>
           </p>
-        </div>
-      </div>
 
-      {/* Booking Slots */}
-      <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
-        <p>Booking slots</p>
-        <div className="flex gap-3 items-center w-full overflow-x-scroll mt-4">
-          {docSlots.length > 0 &&
-            docSlots.map((daySlots, index) => (
-              <div
-                className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index
-                    ? `bg-primary text-white`
-                    : `border border-gray-200`
-                  }`}
-                key={index}
-                onClick={() => setSlotIndex(index)}
-              >
-                <p>{daysOfWeek[new Date(daySlots[0]?.dateTime).getDay()]}</p>
-                <p>{new Date(daySlots[0]?.dateTime).getDate()}</p>
-              </div>
-            ))}
-        </div>
-        <div className="flex items-center gap-3 w-full overflow-x-scroll mt-4">
-          {docSlots[slotIndex]?.map((item, index) => (
-            <p
-              key={index}
-              className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${selectedSlotIndex === index
-                  ? `bg-primary text-white`
-                  : `text-gray-400 border border-gray-300`
-                }`}
-              onClick={() => setSelectedSlotIndex(index)}
+          {/* Nút Edit và Delete dưới Appointment Fee */}
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={() => navigate(`/admin/edit/${docId}`)}
+              className="text-sm px-4 py-2 rounded-lg transition-all bg-gray-100 hover:bg-blue-500 hover:text-white"
             >
-              {item.time?.toLowerCase()}
-            </p>
-          ))}
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-sm px-4 py-2 rounded-lg transition-all bg-gray-100 hover:bg-red-500 hover:text-white"
+            >
+              Delete
+            </button>
+          </div>
         </div>
-        <button
-          onClick={bookAppointment}
-          className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6"
-        >
-          Book an appointment
-        </button>
       </div>
 
       {/* Related Doctors */}
