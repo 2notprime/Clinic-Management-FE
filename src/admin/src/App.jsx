@@ -28,7 +28,7 @@ const App = () => {
       setUserId(id);
     }
   }, [location, userId, setUserId]);
-  
+
   useEffect(() => {
     if (userId && !location.search.includes(`id=${userId}`)) {
       const currentPath = location.pathname;
@@ -38,7 +38,7 @@ const App = () => {
   }, [userId, location, navigate]);
 
 
-  
+
   return (
     <AppContextProvider>
       <div className='mx-4 sm:mx-[10%]'>
@@ -49,13 +49,13 @@ const App = () => {
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/add-doctor" element={<AddDoctor />} />
           <Route path="/doctors-list" element={<DoctorsList />} />
-          <Route path="/edit/:docId" element={<Edit/>} />
-          <Route path="/editdoctor/:docId" element={<EditDoctor/>} />
+          <Route path="/edit/:docId" element={<Edit />} />
+          <Route path="/editdoctor/:docId" element={<EditDoctor />} />
           <Route path="/my-appointments" element={<MyAppointments />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path='/change-password' element={<ChangePassword />} />
         </Routes>
-        <Footer />
+
       </div>
     </AppContextProvider>
   );

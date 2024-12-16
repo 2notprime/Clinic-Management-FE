@@ -20,7 +20,7 @@ const NavBar = () => {
         // Redirect to login page
         navigate('/login');
     };
-    const toPath = (roleId === 'R2'||roleId === null) ? '/doctors' : '/patients';
+    const toPath = (roleId === 'R2' || roleId === null) ? '/doctors' : '/patients';
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
             <img onClick={() => navigate('/')} className='w-56 cursor-pointer' src={assets.logo1} alt='' />

@@ -1,10 +1,10 @@
 import appointment_img from './appointment_img.png'
 import header_img from './header_img.png'
 import group_profiles from './group_profiles.png'
-import profile_pic from './profile_pic.png'
+import profile_pic from './admin_pic.png'
 import contact_image from './contact_image.png'
 import about_image from './about_image.png'
-import logo from './logo.svg'
+import logo from './logo1.png'
 import dropdown_icon from './dropdown_icon.svg'
 import menu_icon from './menu_icon.svg'
 import cross_icon from './cross_icon.png'
@@ -296,12 +296,12 @@ export const doctors = [
             line2: 'Circle, Ring Road, London'
         }
 
-        
+
     },
-{
+    {
 
 
-    
+
         _id: 'doc16',
         name: 'Dr. Rohit Sampannavar',
         image: doc7,
@@ -314,9 +314,9 @@ export const doctors = [
             line1: '17th Cross, Richmond',
             line2: 'Circle, Ring Road, London'
         }
-    
-}
-    ]
+
+    }
+]
 
 
 export default assets;
