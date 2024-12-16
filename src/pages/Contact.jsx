@@ -15,7 +15,7 @@ const Contact = () => {
                     <p className='font-semibold text-lg text-gray-600'>OUR OFFICE</p>
                     <p className='text-gray-500'>1234 Giai Phong <br /> Ha Noi, Viet Nam</p>
                     <p className='text-gray-500'>Tel: +84 0123-456-789 <br /> Email: superclinic@gmail.com</p>
-                    <p className='font-semibold text-lg text-gray-600'>Careers at PRESCRIPTO</p>
+                    <p className='font-semibold text-lg text-gray-600'>Careers at BLOOM</p>
                     <p className='text-gray-500'>Learn more about our teams and job openings.</p>
                     <button className='border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-300'>Explore Jobs</button>
                 </div>

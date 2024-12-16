@@ -23,7 +23,7 @@ const NavBar = () => {
     const toPath = (roleId === 'R2'||roleId === null) ? '/doctors' : '/patients';
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-            <img onClick={() => navigate('/')} className='w-56 cursor-pointer' src={assets.logoreal} alt='' />
+            <img onClick={() => navigate('/')} className='w-56 cursor-pointer' src={assets.logo1} alt='' />
             <ul className='hidden md:flex items-start gap-7 font-medium'>
                 <NavLink to='/'>
                     <li className='py-1'>HOME</li>
