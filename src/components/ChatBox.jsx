@@ -16,7 +16,7 @@ const ChatBox = () => {
 
       // Bắt đầu chờ và hiển thị hiệu ứng loading
       setIsLoading(true);
-      
+
       try {
         // Gửi request đến API
         const response = await axiosClient.post('/get-bot-response', { message: message });
@@ -55,12 +55,11 @@ const ChatBox = () => {
 
   return (
     <div
-      className={`fixed bottom-5 left-5 w-80 p-4 border bg-white shadow-lg rounded-lg transition-all ${
-        isChatOpen ? "h-[400px]" : "h-[60px]"
-      }`}
+      className={`fixed bottom-5 left-5 w-80 p-4 border bg-white shadow-lg rounded-lg transition-all ${isChatOpen ? "h-[400px]" : "h-[60px]"
+        }`}
     >
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">Chat với Bot</h3>
+        <h3 className="text-lg font-semibold">Chuyên viên Tư vấn</h3>
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
           className="text-sm text-gray-600 hover:text-gray-800"
@@ -77,11 +76,10 @@ const ChatBox = () => {
               className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`p-2 max-w-[70%] rounded-lg ${
-                  msg.isUser
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800"
-                }`}
+                className={`p-2 max-w-[70%] rounded-lg ${msg.isUser
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+                  }`}
               >
                 {msg.text}
               </div>
