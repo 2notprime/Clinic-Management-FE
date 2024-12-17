@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
   const [doctors, setDoctors] = useState([]); // Lưu danh sách bác sĩ
   const [patients, setPatients] = useState([]); // Lưu danh sách bệnh nhân
   const [previousPatients, setPreviosPatients] = useState([])
-
+  const [checkSaw, setCheckSaw] = useState(null); 
   // Hàm fetch dữ liệu người dùng từ backend
   const fetchUser = async (id) => {
     try {
@@ -24,6 +24,25 @@ export const UserProvider = ({ children }) => {
       setRoleId(null);
     }
   };
+
+  const fetchCheckSaw = async (id, message) => {
+    try {
+        // Gửi id và message trong body sử dụng phương thức POST
+        const response = await axiosClient.post('/get-check-saw', {
+            id: id,
+            message: message
+        });
+
+        setCheckSaw(response.data.length);
+        console.log('User fetched:', response.data);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        setCheckSaw(null);
+    }
+};
+
+
+
 
   // Hàm fetch danh sách bác sĩ
   const fetchDoctorsInvolve = async (id) => {
@@ -67,9 +86,11 @@ export const UserProvider = ({ children }) => {
 
         if (roleId === "R2") {
           await fetchDoctorsInvolve(userId);
+          await fetchCheckSaw(userId,0)
         } else if (roleId === "R1") {
           await fetchPatientsInvolve(userId);
           await fetchPreviousPatientsInvolve(userId);
+          await fetchCheckSaw(userId,1)
         }
       } else {
         setUser(null); // Xóa thông tin user khi userId là null
@@ -81,7 +102,7 @@ export const UserProvider = ({ children }) => {
   }, [userId, roleId]);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId, roleId, user, doctors, patients, previousPatients }}>
+    <UserContext.Provider value={{ checkSaw,userId, setUserId, roleId, user, doctors, patients, previousPatients }}>
       {children}
     </UserContext.Provider>
   );

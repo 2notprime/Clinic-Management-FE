@@ -6,8 +6,7 @@ import { useUser } from '../context/UserContext';
 const NavBar = () => {
     const navigate = useNavigate();
     const [showMenu, setshowMenu] = useState(false);
-    const { userId, setUserId, user, roleId } = useUser();
-
+    const { userId, setUserId, user, roleId, checkSaw } = useUser();
 
     const handleLogout = () => {
         // Clear user context
@@ -20,7 +19,9 @@ const NavBar = () => {
         // Redirect to login page
         navigate('/login');
     };
+
     const toPath = (roleId === 'R2' || roleId === null) ? '/doctors' : '/patients';
+
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
             <img onClick={() => navigate('/')} className='w-56 cursor-pointer' src={assets.logo1} alt='' />
@@ -45,19 +46,35 @@ const NavBar = () => {
             <div className='flex items-center gap-2'>
                 {userId !== null ? (
                     <div className='flex items-center gap-2 cursor-pointer group relative'>
-                        {/* Hiển thị ảnh dựa trên giá trị user.image */}
-                        <img
-                            className='w-8 rounded-full'
-                            src={user?.image ? `data:image/png;base64,${user.image}` : assets.profile_pic}
-                            alt=""
-                        />
-                        <img className='w-2.5' src={assets.dropdown_icon} alt="" />
+                        {/* Hiển thị ảnh avatar */}
+                        <div className='relative'>
+                            <img
+                                className='w-8 rounded-full'
+                                src={user?.image ? `data:image/png;base64,${user.image}` : assets.profile_pic}
+                                alt="avatar"
+                            />
+                            {/* Thêm chấm đỏ nếu checkSaw khác 0 */}
+                            {checkSaw !== 0 && (
+                                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold flex items-center justify-center rounded-full w-5 h-5">
+                                    {checkSaw}
+                                </div>
+                            )}
+                        </div>
+                        <img className='w-2.5' src={assets.dropdown_icon} alt="dropdown" />
                         <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
                             <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
-                                <p onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
-                                <p onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
-                                <p onClick={() => navigate('change-password')} className='hover:text-black cursor-pointer'>Change Password</p>
-                                <p onClick={handleLogout} className='hover:text-black cursor-pointer'>Logout</p>
+                                <span onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer'>My Profile</span>
+                                {/* Hiển thị chấm đỏ cho "My Appointments" nếu checkSaw khác 0 */}
+                                <span onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer flex items-center'>
+                                    My Appointments
+                                    {checkSaw !== 0 && (
+                                        <div className="ml-2 bg-red-500 text-white text-xs font-bold flex items-center justify-center rounded-full w-5 h-5">
+                                            {checkSaw}
+                                        </div>
+                                    )}
+                                </span>
+                                <span onClick={() => navigate('change-password')} className='hover:text-black cursor-pointer'>Change Password</span>
+                                <span onClick={handleLogout} className='hover:text-black cursor-pointer'>Logout</span>
                             </div>
                         </div>
                     </div>

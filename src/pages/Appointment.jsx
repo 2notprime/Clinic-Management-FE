@@ -81,6 +81,7 @@ const Appointment = () => {
       date: selectedSlot.dateTime.toISOString(),
       time: selectedSlot.time,
       patientId: userId,
+      message: 0
     };
 
     try {

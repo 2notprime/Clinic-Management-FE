@@ -40,7 +40,8 @@ const Patients = () => {
                 doctorId: 'doc' + userId,
                 patientId: p,
                 time: t,
-                date: da.toISOString()
+                date: da.toISOString(),
+                message: 1
             };
             
 

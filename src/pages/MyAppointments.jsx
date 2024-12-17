@@ -1,6 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useContext } from 'react'
-import { useUser } from '../context/UserContext'
+import React, { useEffect } from 'react';
+import { useUser } from '../context/UserContext';
 import axiosClient from '../axiosClient';
 
 function formatDate(dateString) {
@@ -18,24 +17,51 @@ function formatDate(dateString) {
 }
 
 const MyAppointments = () => {
+  const { userId, doctors, patients, roleId, checkSaw } = useUser();
 
+  // Hàm gửi yêu cầu xóa check saw
+  const fetchCheckSaw = async (userId, roleId) => {
+    try {
+      // Kiểm tra giá trị roleId để xác định message
+      const message = roleId === 'R1' ? 1 : 0;
 
-  const { userId, doctors, patients, roleId } = useUser();
+      // Gửi userId và message trong body của POST request
+      const response = await axiosClient.post('/delete-check-saw', {
+        userId,  // Gửi userId
+        message, // Gửi message dựa trên roleId
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching check saw:', error);
+      alert('Error');
+    }
+  };
+
+  // Gọi fetchCheckSaw khi component được render
+  useEffect(() => {
+    if (userId && roleId) {
+      fetchCheckSaw(userId, roleId);
+    }
+  }, [userId, roleId]);
+
+  // Hàm hủy đặt lịch
   const fetDeleteBookings = async (data) => {
     try {
       // Gửi cả data và userId trong body của POST request
       const response = await axiosClient.post('/delete-appointment', {
         userId,      // Gửi userId
         data,        // Gửi data (có thể là appointmentId hoặc thông tin khác)
-        roleId,    // Gửi roleId (ví dụ: R1, R2, R3)
+        roleId,      // Gửi roleId (ví dụ: R1, R2, R3)
       });
       console.log(response.data);
-      alert('Ok')
+      alert('Ok');
     } catch (error) {
       console.error('Error fetching user:', error);
-      alert('Error')
+      alert('Error');
     }
   };
+
   const timeSlotMapping = {
     T1: "07:00 AM - 08:00 AM",
     T2: "08:00 AM - 09:00 AM",
@@ -46,6 +72,7 @@ const MyAppointments = () => {
     T7: "03:00 PM - 04:00 PM",
     T8: "04:00 PM - 05:00 PM",
   };
+
   if (roleId === "R2") {
     return (
       <div>
@@ -65,11 +92,6 @@ const MyAppointments = () => {
                 <p className='text-xs'>{item.address.line2}</p>
                 <p className='text-xs mt-1'><span className='text-sm text-neutal-700 font-medium'>Date & Time:</span>{formatDate(item.date)} | {timeSlotMapping[item.timeType]} </p>
               </div>
-              <div>
-
-              </div>
-
-
 
               <div className='flex flex-col gap-2 justify-end'>
                 <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600  hover:text-white transition-all duration-300'
@@ -78,9 +100,7 @@ const MyAppointments = () => {
               </div>
             </div>
           ))}
-
         </div>
-
       </div>
     )
   }
@@ -100,11 +120,6 @@ const MyAppointments = () => {
                 <p>{item.speciality}</p>
                 <p className='text-xs mt-1'><span className='text-sm text-neutal-700 font-medium'>Date & Time:</span>{formatDate(item.date)} | {timeSlotMapping[item.timeType]} </p>
               </div>
-              <div>
-
-              </div>
-
-
 
               <div className='flex flex-col gap-2 justify-end'>
                 <button className='text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600  hover:text-white transition-all duration-300'
@@ -113,13 +128,10 @@ const MyAppointments = () => {
               </div>
             </div>
           ))}
-
         </div>
-
       </div>
     )
   }
+};
 
-}
-
-export default MyAppointments
+export default MyAppointments;
